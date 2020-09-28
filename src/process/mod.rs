@@ -79,32 +79,24 @@ impl Process {
                 }
             }).unwrap();
 
-            self.tick(stdin, &stdout_receiver, &stderr_receiver, &exit_receiver)
+            loop {
+                self.check_stdout_stderr_exit_code(&stdout_receiver, &stderr_receiver, &exit_receiver);
+
+                match self.receiver.recv_timeout(Duration::from_millis(50)) {
+                    Ok(command) => {
+                        match command.action {
+                            ThreadCommandAction::Terminate => break,
+                            ThreadCommandAction::Stdin => self.send_stdin(stdin, &command.data),
+                            _ => {}
+                        }
+                    }
+                    Err(_) => (),
+                }
+            }
         } else {
             let error = child_result.unwrap_err().to_string();
             println!("Spawn command error: {}", error);
             self.sender.send(ThreadCommand::new(ThreadCommandAction::Error, error)).unwrap();
-        }
-    }
-
-    fn tick(&mut self, stdin: &mut ChildStdin, stdout_receiver: &Receiver<String>, stderr_receiver: &Receiver<String>, exit_receiver: &Receiver<String>) {
-        let mut need_terminate = false;
-
-        self.check_stdout_stderr_exit_code(stdout_receiver, stderr_receiver, exit_receiver);
-
-        match self.receiver.recv_timeout(Duration::from_millis(50)) {
-            Ok(command) => {
-                match command.action {
-                    ThreadCommandAction::Terminate => need_terminate = true,
-                    ThreadCommandAction::Stdin => self.send_stdin(stdin, &command.data),
-                    _ => {}
-                }
-            }
-            Err(_) => (),
-        }
-
-        if need_terminate == false {
-            self.tick(stdin, stdout_receiver, stderr_receiver, exit_receiver);
         }
     }
 
