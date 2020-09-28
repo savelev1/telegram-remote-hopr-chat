@@ -111,6 +111,7 @@ impl Process {
     fn check_stdout_stderr_exit_code(&mut self, stdout_receiver: &Receiver<String>, stderr_receiver: &Receiver<String>, exit_receiver: &Receiver<String>) {
         match stdout_receiver.recv_timeout(Duration::from_millis(50)) {
             Ok(message) => {
+                println!("{}", message);
                 self.sender.send(ThreadCommand::new(ThreadCommandAction::Stdout, message)).unwrap();
             }
             Err(_) => self.check_stderr_exit_code(stderr_receiver, exit_receiver),

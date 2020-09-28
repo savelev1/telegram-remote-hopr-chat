@@ -16,7 +16,7 @@ const HELP: &str = "
 /balance - shows our current native and hopr balance
 /send xHOPR_address message - sends a message to another party
 /send_to_author message - sends a message to bot author.
-/includeRecipient [y | n] - set includeRecipient (prepends your address to all messages)
+/include_recipient [y | n] - set includeRecipient (prepends your address to all messages)
 /quit - send /stdin quit
 <b>For other commands</b> send <code>/stdin command</code>, e.g.: <code>/stdin help</code>
 
@@ -37,60 +37,25 @@ pub async fn on_bot_message(synchronizer: &mut Synchronizer, message: &Message) 
                 } else if data.starts_with("/start_hopr") {
                     on_start_hopr_command(synchronizer, &message).await
                 } else if data.starts_with("/crawl") {
-                    if synchronizer.is_running_process() {
-                        synchronizer.send_stdin_to_process(String::from("crawl"));
-                    }
+                    on_crawl_hopr_command(synchronizer)
                 } else if data.starts_with("/ping_randobot") {
-                    if synchronizer.is_running_process() {
-                        synchronizer.send_stdin_to_process(format!("ping {}", synchronizer.config.randobot_xhopr_address));
-                    }
+                    on_ping_randobot_hopr_command(synchronizer)
                 } else if data.starts_with("/ping_coverbot") {
-                    if synchronizer.is_running_process() {
-                        synchronizer.send_stdin_to_process(format!("ping {}", synchronizer.config.coverbot_xhopr_address));
-                    }
+                    on_ping_coverbot_hopr_command(synchronizer)
                 } else if data.starts_with("/ping") {
-                    if synchronizer.is_running_process() {
-                        let parts = data.split_whitespace().collect::<Vec<&str>>();
-                        if parts.len() == 2 {
-                            synchronizer.send_stdin_to_process(format!("ping {}", parts[1]));
-                        }
-                    }
+                    on_ping_hopr_command(synchronizer, data)
                 } else if data.starts_with("/my_address") {
-                    if synchronizer.is_running_process() {
-                        synchronizer.send_stdin_to_process(String::from("myAddress"));
-                    }
+                    on_my_address_hopr_command(synchronizer)
                 } else if data.starts_with("/balance") {
-                    if synchronizer.is_running_process() {
-                        synchronizer.send_stdin_to_process(String::from("balance"));
-                    }
+                    on_balance_hopr_command(synchronizer)
                 } else if data.starts_with("/send_to_author") {
-                    if synchronizer.is_running_process() {
-                        let parts = data.split_whitespace().collect::<Vec<&str>>();
-                        if parts.len() == 2 {
-                            synchronizer.send_stdin_to_process(format!("send 16Uiu2HAm7hqva9iw7tbTS5q8bCP9eSrRYpqYgPHPRRrgKtZwiEts"));
-                            synchronizer.send_stdin_to_process(format!("{}", parts[1]));
-                        }
-                    }
+                    on_send_to_author_hopr_command(synchronizer, data)
                 } else if data.starts_with("/send") {
-                    if synchronizer.is_running_process() {
-                        let parts = data.split_whitespace().collect::<Vec<&str>>();
-                        if parts.len() == 3 {
-                            synchronizer.send_stdin_to_process(format!("send {}", parts[1]));
-                            synchronizer.send_stdin_to_process(format!("{}", parts[2]));
-                        }
-                    }
-                } else if data.starts_with("/includeRecipient") {
-                    if synchronizer.is_running_process() {
-                        let parts = data.split_whitespace().collect::<Vec<&str>>();
-                        if parts.len() == 2 {
-                            synchronizer.send_stdin_to_process(String::from("includeRecipient"));
-                            synchronizer.send_stdin_to_process(format!("{}", parts[1]));
-                        }
-                    }
+                    on_send_hopr_command(synchronizer, data)
+                } else if data.starts_with("/include_recipient") {
+                    on_include_recipient_hopr_command(synchronizer, data)
                 } else if data.starts_with("/quit") {
-                    if synchronizer.is_running_process() {
-                        synchronizer.send_stdin_to_process(String::from("quit"));
-                    }
+                    on_quit_hopr_command(synchronizer)
                 } else if data.starts_with("/run") {
                     on_run_command(synchronizer, &message, data).await
                 } else if data.starts_with("/kill") {
@@ -113,6 +78,81 @@ pub async fn on_bot_message(synchronizer: &mut Synchronizer, message: &Message) 
         } else {
             synchronizer.bot.send(&message, &format!("Sorry, I do not talk to strangers. Your id <code>{}</code>.", message.from.id)).await;
         }
+    }
+}
+
+fn on_quit_hopr_command(synchronizer: &mut Synchronizer) {
+    if synchronizer.is_running_process() {
+        synchronizer.send_stdin_to_process(String::from("quit"));
+    }
+}
+
+fn on_include_recipient_hopr_command(synchronizer: &mut Synchronizer, data: &String) {
+    if synchronizer.is_running_process() {
+        let parts = data.split_whitespace().collect::<Vec<&str>>();
+        if parts.len() == 2 {
+            synchronizer.send_stdin_to_process(String::from("includeRecipient"));
+            synchronizer.send_stdin_to_process(format!("{}", parts[1]));
+        }
+    }
+}
+
+fn on_send_hopr_command(synchronizer: &mut Synchronizer, data: &String) {
+    if synchronizer.is_running_process() {
+        let parts = data.split_whitespace().collect::<Vec<&str>>();
+        if parts.len() == 3 {
+            synchronizer.send_stdin_to_process(format!("send {}", parts[1]));
+            synchronizer.send_stdin_to_process(format!("{}", parts[2]));
+        }
+    }
+}
+
+fn on_send_to_author_hopr_command(synchronizer: &mut Synchronizer, data: &String) {
+    if synchronizer.is_running_process() {
+        let parts = data.split_whitespace().collect::<Vec<&str>>();
+        if parts.len() == 2 {
+            synchronizer.send_stdin_to_process(format!("send 16Uiu2HAm7hqva9iw7tbTS5q8bCP9eSrRYpqYgPHPRRrgKtZwiEts"));
+            synchronizer.send_stdin_to_process(format!("{}", parts[1]));
+        }
+    }
+}
+
+fn on_balance_hopr_command(synchronizer: &mut Synchronizer) {
+    if synchronizer.is_running_process() {
+        synchronizer.send_stdin_to_process(String::from("balance"));
+    }
+}
+
+fn on_my_address_hopr_command(synchronizer: &mut Synchronizer) {
+    if synchronizer.is_running_process() {
+        synchronizer.send_stdin_to_process(String::from("myAddress"));
+    }
+}
+
+fn on_ping_hopr_command(synchronizer: &mut Synchronizer, data: &String) {
+    if synchronizer.is_running_process() {
+        let parts = data.split_whitespace().collect::<Vec<&str>>();
+        if parts.len() == 2 {
+            synchronizer.send_stdin_to_process(format!("ping {}", parts[1]));
+        }
+    }
+}
+
+fn on_ping_coverbot_hopr_command(synchronizer: &mut Synchronizer) {
+    if synchronizer.is_running_process() {
+        synchronizer.send_stdin_to_process(format!("ping {}", synchronizer.config.coverbot_xhopr_address));
+    }
+}
+
+fn on_ping_randobot_hopr_command(synchronizer: &mut Synchronizer) {
+    if synchronizer.is_running_process() {
+        synchronizer.send_stdin_to_process(format!("ping {}", synchronizer.config.randobot_xhopr_address));
+    }
+}
+
+fn on_crawl_hopr_command(synchronizer: &mut Synchronizer) {
+    if synchronizer.is_running_process() {
+        synchronizer.send_stdin_to_process(String::from("crawl"));
     }
 }
 
