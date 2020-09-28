@@ -8,9 +8,11 @@ telegram-remote-hopr-chat is your Telegram bot for remote access to [Hopr Chat](
 
 ### Installation of Dependency
 
-[Install](https://docs.hoprnet.org/home/getting-started/saentis-testnet/quickstart) Hopr Chat.
+[Install](https://docs.hoprnet.org/home/getting-started/saentis-testnet/quickstart) Hopr Chat if not installed.
 
-[Install](https://www.rust-lang.org/learn/get-started) Rust. 
+[Install](https://github.com/git-guides/install-git) Git if not installed.
+
+[Install](https://www.rust-lang.org/learn/get-started) Rust if not installed. 
 
 You need to create your Telegram bot and **get its token**: in Telegram, write the bot @BotFather command `/start`, then `/newbot` and follow the instructions.
 
@@ -48,6 +50,8 @@ If Hopr Chat is running, end it with `quit` command.
 Open the directory where the bot is installed and run it:
 
 `cd /home/hopr/telegram-remote-hopr-chat && cargo run`
+
+The first launch may take a few minutes.
 
 You can run the bot in a new session (e.g. [Tmux](https://github.com/tmux/tmux/wiki)) so that the bot continues to run when you close the terminal.
 
@@ -89,9 +93,11 @@ telegram-remote-hopr-chat это ваш Telegram бот для удаленно�
 
 ### Установка зависимостей
 
-[Установите](https://docs.hoprnet.org/home/getting-started/saentis-testnet/quickstart) Hopr Chat.
+[Установите](https://docs.hoprnet.org/home/getting-started/saentis-testnet/quickstart) Hopr Chat если не установлен.
 
-[Установите](https://www.rust-lang.org/learn/get-started) Rust. 
+[Установите](https://github.com/git-guides/install-git) Git если не установлен.
+
+[Установите](https://www.rust-lang.org/learn/get-started) Rust если не установлен. 
 
 Вам необходимо создать свой Telegram бот и **получить его токен**: в Telegram напишите боту @BotFather команду `/start`, затем `/newbot` и следуйте инструкциям.
 
@@ -129,6 +135,8 @@ telegram-remote-hopr-chat установится в директорию */home/
 Откройте директорию в которую установился бот и запустите его:
 
 `cd /home/hopr/telegram-remote-hopr-chat && cargo run`
+
+Первый запуск может занять несколько минут.
 
 Вы можете запустить бота в отдельной сессии (например [Tmux](https://github.com/tmux/tmux/wiki)), чтобы бот продолжал работать когда вы закроете терминал.
 

@@ -38,16 +38,22 @@ impl TgBot {
     }
 
     pub async fn send(&self, message: &Message, text: &String) {
-        if let Err(_err) = self.api.send(message.chat.text(format!("{}", text)).parse_mode(ParseMode::Html)).await {
-            println!("Error: {}", _err);
+        if text.trim().len() > 0 {
+            if let Err(_err) = self.api.send(message.chat.text(format!("{}", text)).parse_mode(ParseMode::Html)).await {
+                println!("Error sending message to bot: {}", _err);
+            }
         }
     }
 
     pub async fn send_pre(&self, message: &Message, text: &String) {
-        self.send(message, &format!("<pre>{}</pre>", text)).await;
+        if text.trim().len() > 0 {
+            self.send(message, &format!("<pre>{}</pre>", text)).await;
+        }
     }
 
     pub async fn send_code(&self, message: &Message, text: &String) {
-        self.send(message, &format!("<code>{}</code>", text)).await;
+        if text.trim().len() > 0 {
+            self.send(message, &format!("<code>{}</code>", text)).await;
+        }
     }
 }
