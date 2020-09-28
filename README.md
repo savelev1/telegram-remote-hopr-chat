@@ -75,6 +75,8 @@ Restart the bot to apply the new config.json file.
 
 ⚠️ If you leave the `telegram_user_ids` field empty, anyone can use your bot!
 
+Write your bot in Telegram `/start` then `/start_hopr` to start Hopr Chat.
+
 **✅That's all**.
 
 ### Update telegram-remote-hopr-chat
@@ -159,6 +161,8 @@ telegram-remote-hopr-chat установится в директорию */home/
 Перезапустите бота чтобы применился новый файл config.json.
 
 ⚠️ Если вы оставите поле `telegram_user_ids` пустым кто угодно сможет пользоваться вашим ботом!
+
+Напишите своему боту в Telegram `/start` затем `/start_hopr` для запуска Hopr Chat.
 
 **✅Вот и все**.
 
