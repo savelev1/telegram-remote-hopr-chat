@@ -4,6 +4,12 @@
 
 telegram-remote-hopr-chat is your Telegram bot for remote access to [Hopr Chat](https://docs.hoprnet.org/home/getting-started/saentis-testnet/quickstart), which allows you to receive the output of the Hopr Chat process and send commands for input.
 
+<div align="center">
+  <kbd>
+    <img src=https://raw.githubusercontent.com/savelev1/telegram-remote-hopr-chat/master/media/example.gif />
+  </kbd>
+</div>
+
 ## Installation
 
 ### Installation of Dependency
@@ -90,6 +96,12 @@ Restart the bot to apply the updates.
 ## Описание [RU]
 
 telegram-remote-hopr-chat это ваш Telegram бот для удаленного доступа к [Hopr Chat](https://docs.hoprnet.org/home/getting-started/saentis-testnet/quickstart), который позволяет получать вывод процесса Hopr Chat и отправлять команды на ввод.
+
+<div align="center">
+  <kbd>
+    <img src=https://raw.githubusercontent.com/savelev1/telegram-remote-hopr-chat/master/media/example.gif />
+  </kbd>
+</div>
 
 ## Установка
 
