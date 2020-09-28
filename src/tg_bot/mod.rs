@@ -23,7 +23,7 @@ impl TgBot {
     pub async fn run(&mut self, sender: Sender<Message>) {
         let cloned_sender = sender.clone();
         let token = self.token.clone();
-        thread::spawn(move || {
+        thread::Builder::new().name("tg_bot".to_string()).spawn(move || {
             Runtime::new().unwrap().block_on(async {
                 let thread_api = Api::new(token);
                 let mut stream = thread_api.stream();
@@ -34,7 +34,7 @@ impl TgBot {
                     }
                 }
             })
-        });
+        }).unwrap();
     }
 
     pub async fn send(&self, message: &Message, text: &String) {

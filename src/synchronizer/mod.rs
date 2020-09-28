@@ -73,14 +73,14 @@ impl Synchronizer
             self.process_main_receiver = Some(process_main_receiver);
             let cloned_process_thread_sender = process_thread_sender.clone();
             let cloned_command = command.clone();
-            thread::spawn(move || {
+            thread::Builder::new().name("process".to_string()).spawn(move || {
                 let mut process = Process::new(
                     &cloned_command,
                     cloned_process_thread_sender,
                     process_thread_receiver,
                 );
                 process.start();
-            });
+            }).unwrap();
         }
     }
 

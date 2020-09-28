@@ -49,18 +49,18 @@ impl Process {
 
             let (exit_sender, exit_receiver) = mpsc::channel();
             let cloned_exit_sender = exit_sender.clone();
-            thread::spawn(move || {
+            thread::Builder::new().name("process_exitcode".to_string()).spawn(move || {
                 let code = child.wait()
                     .expect("failed to wait on child");
                 match cloned_exit_sender.send(code.to_string()) {
                     Ok(_) => (),
                     Err(_) => (),
                 }
-            });
+            }).unwrap();
 
             let (stdout_sender, stdout_receiver) = mpsc::channel();
             let cloned_stdout_sender = stdout_sender.clone();
-            thread::spawn(move || {
+            thread::Builder::new().name("process_stdout".to_string()).spawn(move || {
                 let reader = BufReader::new(stdout);
                 for line in reader.lines() {
                     match cloned_stdout_sender.send(line.unwrap()) {
@@ -68,16 +68,16 @@ impl Process {
                         Err(_) => (),
                     }
                 }
-            });
+            }).unwrap();
 
             let (stderr_sender, stderr_receiver) = mpsc::channel();
             let cloned_stderr_sender = stderr_sender.clone();
-            thread::spawn(move || {
+            thread::Builder::new().name("process_stderr".to_string()).spawn(move || {
                 let reader = BufReader::new(stderr);
                 for line in reader.lines() {
                     cloned_stderr_sender.send(line.unwrap()).unwrap();
                 }
-            });
+            }).unwrap();
 
             self.tick(stdin, &stdout_receiver, &stderr_receiver, &exit_receiver)
         } else {

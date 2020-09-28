@@ -24,13 +24,13 @@ You need to create your Telegram bot and **get its token**: in Telegram, write t
 
 ### Installation of telegram-remote-hopr-chat
 
-`git clone https://github.com/savelev1/telegram-remote-hopr-chat /home/hopr/telegram-remote-hopr-chat`
+`git clone https://github.com/savelev1/telegram-remote-hopr-chat $HOME/telegram-remote-hopr-chat`
 
-telegram-remote-hopr-chat will install in the directory */home/hopr/telegram-remote-hopr-chat*. You can change it at your discretion.
+telegram-remote-hopr-chat will install in the directory *$HOME/telegram-remote-hopr-chat*. You can change it at your discretion.
 
 Open the directory where the bot is installed and create the config.json file from the config.example.json:
 
-`cd /home/hopr/telegram-remote-hopr-chat && cp config.example.json config.json`
+`cd $HOME/telegram-remote-hopr-chat && cp config.example.json config.json`
 
 Open config.json to configure
 `nano config.json`
@@ -55,7 +55,7 @@ If Hopr Chat is running, end it with `quit` command.
 
 Open the directory where the bot is installed and run it:
 
-`cd /home/hopr/telegram-remote-hopr-chat && cargo run`
+`cd $HOME/telegram-remote-hopr-chat && cargo run`
 
 The first launch may take a few minutes.
 
@@ -89,7 +89,7 @@ Write your bot in Telegram `/start` then `/start_hopr` to start Hopr Chat.
 
 Go to the bot directory and pull out the updates:
 
-```cd /home/hopr/telegram-remote-hopr-chat && git pull```
+```cd $HOME/telegram-remote-hopr-chat && git pull```
 
 Restart the bot to apply the updates.
 
@@ -117,13 +117,13 @@ telegram-remote-hopr-chat это ваш Telegram бот для удаленно�
 
 ### Установка telegram-remote-hopr-chat
 
-`git clone https://github.com/savelev1/telegram-remote-hopr-chat /home/hopr/telegram-remote-hopr-chat`
+`git clone https://github.com/savelev1/telegram-remote-hopr-chat $HOME/telegram-remote-hopr-chat`
 
-telegram-remote-hopr-chat установится в директорию */home/hopr/telegram-remote-hopr-chat*. Вы можете ее изменить на свое усмотрение.
+telegram-remote-hopr-chat установится в директорию *$HOME/telegram-remote-hopr-chat*. Вы можете ее изменить на свое усмотрение.
 
 Откройте директорию в которую установился бот, и создайте файл config.json из config.example.json:
 
-`cd /home/hopr/telegram-remote-hopr-chat && cp config.example.json config.json`
+`cd $HOME/telegram-remote-hopr-chat && cp config.example.json config.json`
 
 Откройте config.json для настройки 
 `nano config.json`
@@ -148,7 +148,7 @@ telegram-remote-hopr-chat установится в директорию */home/
 
 Откройте директорию в которую установился бот и запустите его:
 
-`cd /home/hopr/telegram-remote-hopr-chat && cargo run`
+`cd $HOME/telegram-remote-hopr-chat && cargo run`
 
 Первый запуск может занять несколько минут.
 
@@ -182,6 +182,6 @@ telegram-remote-hopr-chat установится в директорию */home/
 
 Перейдите в директорию расположения бота и вытяните обновления:
 
-```cd /home/hopr/telegram-remote-hopr-chat && git pull```
+```cd $HOME/telegram-remote-hopr-chat && git pull```
 
 Перезапустите бота.
