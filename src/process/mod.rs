@@ -52,10 +52,7 @@ impl Process {
             thread::Builder::new().name("process_exitcode".to_string()).spawn(move || {
                 let code = child.wait()
                     .expect("failed to wait on child");
-                match cloned_exit_sender.send(code.to_string()) {
-                    Ok(_) => (),
-                    Err(_) => (),
-                }
+                cloned_exit_sender.send(code.to_string())
             }).unwrap();
 
             let (stdout_sender, stdout_receiver) = mpsc::channel();
@@ -63,10 +60,7 @@ impl Process {
             thread::Builder::new().name("process_stdout".to_string()).spawn(move || {
                 let reader = BufReader::new(stdout);
                 for line in reader.lines() {
-                    match cloned_stdout_sender.send(line.unwrap()) {
-                        Ok(_) => (),
-                        Err(_) => (),
-                    }
+                    cloned_stdout_sender.send(line.unwrap()).unwrap_or_default();
                 }
             }).unwrap();
 
@@ -75,22 +69,19 @@ impl Process {
             thread::Builder::new().name("process_stderr".to_string()).spawn(move || {
                 let reader = BufReader::new(stderr);
                 for line in reader.lines() {
-                    cloned_stderr_sender.send(line.unwrap()).unwrap();
+                    cloned_stderr_sender.send(line.unwrap()).unwrap_or_default();
                 }
             }).unwrap();
 
             loop {
                 self.check_stdout_stderr_exit_code(&stdout_receiver, &stderr_receiver, &exit_receiver);
 
-                match self.receiver.recv_timeout(Duration::from_millis(50)) {
-                    Ok(command) => {
-                        match command.action {
-                            ThreadCommandAction::Terminate => break,
-                            ThreadCommandAction::Stdin => self.send_stdin(stdin, &command.data),
-                            _ => {}
-                        }
+                if let Ok(command) = self.receiver.recv_timeout(Duration::from_millis(50)) {
+                    match command.action {
+                        ThreadCommandAction::Terminate => break,
+                        ThreadCommandAction::Stdin => self.send_stdin(stdin, &command.data),
+                        _ => {}
                     }
-                    Err(_) => (),
                 }
             }
         } else {
@@ -104,7 +95,7 @@ impl Process {
         match stdout_receiver.recv_timeout(Duration::from_millis(50)) {
             Ok(message) => {
                 println!("{}", message);
-                self.sender.send(ThreadCommand::new(ThreadCommandAction::Stdout, message)).unwrap();
+                self.sender.send(ThreadCommand::new(ThreadCommandAction::Stdout, message)).unwrap_or_default();
             }
             Err(_) => self.check_stderr_exit_code(stderr_receiver, exit_receiver),
         }
@@ -113,18 +104,15 @@ impl Process {
     fn check_stderr_exit_code(&mut self, stderr_receiver: &Receiver<String>, exit_receiver: &Receiver<String>) {
         match stderr_receiver.recv_timeout(Duration::from_millis(50)) {
             Ok(message) => {
-                self.sender.send(ThreadCommand::new(ThreadCommandAction::Stderr, message)).unwrap();
+                self.sender.send(ThreadCommand::new(ThreadCommandAction::Stderr, message)).unwrap_or_default();
             }
             Err(_) => self.check_error_code(exit_receiver),
         }
     }
 
     fn check_error_code(&mut self, exit_receiver: &Receiver<String>) {
-        match exit_receiver.recv_timeout(Duration::from_millis(50)) {
-            Ok(code) => {
-                self.sender.send(ThreadCommand::new(ThreadCommandAction::Exit, code)).unwrap();
-            }
-            Err(_) => (),
+        if let Ok(code) = exit_receiver.recv_timeout(Duration::from_millis(50)) {
+            self.sender.send(ThreadCommand::new(ThreadCommandAction::Exit, code)).unwrap_or_default();
         }
     }
 

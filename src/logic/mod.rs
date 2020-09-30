@@ -29,7 +29,7 @@ const HELP: &str = "
 
 pub async fn on_bot_message(synchronizer: &mut Synchronizer, message: &Message) {
     if let MessageKind::Text { ref data, .. } = message.kind {
-        let message_from_id = message.from.id.to_string().parse::<u64>().unwrap();
+        let message_from_id = message.from.id.to_string().parse::<u64>().unwrap_or(0);
         if synchronizer.config.telegram_user_ids.len() == 0 || synchronizer.config.telegram_user_ids.contains(&message_from_id) {
             if synchronizer.bot.is_started {
                 if data == "/start" {

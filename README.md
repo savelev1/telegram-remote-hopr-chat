@@ -12,7 +12,7 @@ telegram-remote-hopr-chat is your Telegram bot for remote access to [Hopr Chat](
 
 ## Installation
 
-### Installation of Dependency
+### Installation of Dependencies
 
 [Install](https://docs.hoprnet.org/home/getting-started/saentis-testnet/quickstart) Hopr Chat if not installed.
 

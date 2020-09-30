@@ -28,9 +28,12 @@ impl TgBot {
                 let thread_api = Api::new(token);
                 let mut stream = thread_api.stream();
                 loop {
-                    let update = stream.next().await.unwrap().unwrap();
-                    if let UpdateKind::Message(message) = update.kind {
-                        cloned_sender.send(message).unwrap();
+                    if let Some(result) = stream.next().await {
+                        if let Ok(update) = result {
+                            if let UpdateKind::Message(message) = update.kind {
+                                cloned_sender.send(message).unwrap_or_default();
+                            }
+                        }
                     }
                 }
             })
